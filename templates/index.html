@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat PDF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    {% if 'username' in session %}
+        <div class="username-display">{{ session['username'] }}</div>
+        <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+    {% endif %}
+    <div class="container">
+      <div class="header">
+        <h1 class="main-heading">PDF Explorer Assistant</h1>
+        <div id="alertMessage" class="alert-message"></div>
+      </div>
+      
+      <!-- Main Content -->
+      <div class="row">
+        <div class="column">
+          <h2>Upload & Ask a Question</h2>
+          <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" name="pdf_file" id="pdf_file" accept=".pdf" onchange="showFileName()" />
+            <div id="fileName"></div>
+            <button type="button" onclick="submitPdf()">Submit & Process</button>
+          </form>
+          <h2>Ask a Question</h2>
+          <input type="text" id="question" placeholder="Your question" />
+          <button type="button" onclick="askQuestion()">Ask</button>
+          <button id="audioInputBtn" type="button" onclick="startVoiceInput()">🎙️Speak</button>
+          <h3>Response</h3>
+          <div id="response" class="text-box"></div>
+        </div>
+
+        <div class="column">
+          <h2>Summarize the Document</h2>
+          <button type="button" onclick="summarizePdf('brief')">Brief Summary</button>
+          <button type="button" onclick="summarizePdf('long')">Long Summary</button>
+          <div id="spinnerContainer" class="spinner-container">
+            <div id="spinner" class="spinner"></div>
+            <div id="loadingText">Fetching details from the PDF...</div>
+          </div>
+          <h3>Summary</h3>
+          <div id="summary" class="text-box"></div>
+        </div>
+
+        <div class="column">
+          <h2>About Organization</h2>
+          <button type="button" onclick="fetchOrgInfo()">Fetch Organization Info</button>
+          <div id="orgInfo" class="text-box"></div>
+        </div>
+      </div>
+
+      <div class="image-section">
+        <h2>Extracted Images</h2>
+        <button type="button" onclick="extractImages()">Extract Images</button>
+        <div id="imageContainer" class="image-container"></div>
+      </div>
+
+    </div>
+
+    {% if 'username' in session %}
+      <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+    {% endif %}
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>
