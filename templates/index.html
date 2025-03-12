@@ -3,14 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat PDF</title>
+    <title>Enterprise AI Assistant</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/coaching_1728937.png') }}">
   </head>
   <body>
     {% if 'username' in session %}
         <div class="username-display">{{ session['username'] }}</div>
-        <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+        <a href="{{ url_for('logout') }}" class="logout-button" onclick="logoutUser()">Logout</a>
     {% endif %}
+
     <div class="container">
       <div class="header">
         <h1 class="main-heading">PDF Explorer Assistant</h1>
@@ -29,7 +31,7 @@
           <h2>Ask a Question</h2>
           <input type="text" id="question" placeholder="Your question" />
           <button type="button" onclick="askQuestion()">Ask</button>
-          <button id="audioInputBtn" type="button" onclick="startVoiceInput()">🎙️Speak</button>
+          <button id="audioInputBtn" type="button" onclick="startVoiceInput()">🎙️ Speak</button>
           <h3>Response</h3>
           <div id="response" class="text-box"></div>
         </div>
@@ -62,7 +64,7 @@
     </div>
 
     {% if 'username' in session %}
-      <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+      <a href="{{ url_for('logout') }}" class="logout-button" onclick="logoutUser()">Logout</a>
     {% endif %}
     
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
