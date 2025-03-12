@@ -21,6 +21,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+function logoutUser() {
+  localStorage.clear(); // Clear all stored data
+  sessionStorage.clear(); // Clear session storage if needed
+  window.location.href = "{{ url_for('logout') }}"; // Redirect to logout
+}
+
 function showFileName() {
   const fileInput = document.getElementById("pdf_file");
   const fileName = fileInput.files[0] ? fileInput.files[0].name : "";
