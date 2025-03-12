@@ -6,6 +6,7 @@ werkzeug
 PyPDF2
 pymupdf
 Pillow
+tabula-py
 google-generativeai
 python-dotenv
 langchain
@@ -15,4 +16,3 @@ sentence-transformers
 faiss-cpu
 numpy
 openai
-gunicorn
