@@ -20,7 +20,6 @@ from dotenv import load_dotenv
 from flask_mail import Mail, Message
 from flask import send_from_directory
 import random
-import fitz
 from PIL import Image
 import sqlite3
 
