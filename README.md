@@ -1,5 +1,3 @@
-Here's the content formatted as Markdown, ready for conversion:
-
 # Major
 
 **Major** is a comprehensive project designed to process and analyze PDF documents using advanced AI and machine learning techniques. It leverages tools like Google Generative AI, LangChain, and FAISS to extract, summarize, and answer questions from PDF content. The project also includes features for extracting images from PDFs and generating detailed descriptions of those images.
