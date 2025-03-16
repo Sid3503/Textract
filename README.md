@@ -1,6 +1,6 @@
-# 📄 Major
+# 📄 Enterprise AI Assistant
 
-**Major** is a comprehensive project designed to process and analyze PDF documents using advanced AI and machine learning techniques. It leverages tools like Google Generative AI, LangChain, and FAISS to extract, summarize, and answer questions from PDF content. The project also includes features for extracting images from PDFs and generating detailed descriptions of those images.
+**Enterprise AI Assistant** is a comprehensive project designed to process and analyze PDF documents using advanced AI and machine learning techniques. It leverages tools like Google Generative AI, LangChain, and FAISS to extract, summarize, and answer questions from PDF content. The project also includes features for extracting images from PDFs and generating detailed descriptions of those images.
 
 ## ✨ Features
 
@@ -154,10 +154,6 @@ Contributions are welcome! If you'd like to contribute, please follow these step
 2. Create a new branch for your feature or bugfix.
 3. Commit your changes.
 4. Submit a pull request with a detailed description of your changes.
-
-## 📜 License
-
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
