@@ -1,4 +1,3 @@
-# pdf_processing.py
 import os
 from PyPDF2 import PdfReader
 from flask import Flask, request, render_template, jsonify
@@ -65,34 +64,26 @@ def get_conversational_chain():
 def summarize_data(pdf_path):
     """Summarize content from PDF."""
     text_data = get_pdf_text(pdf_path)
-    summray_type = request.form.get('summary_type')
-    if summray_type == "brief":
+    summary_type = request.form.get('summary_type')
+    if summary_type == "brief":
         default_prompt = "Summarize and extract text (keyword information) from documents relevant to organizational needs in brief in 5-6 lines mentioning about company name and core components of the pdf."
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        response_stream = model.generate_content(
-            [default_prompt, text_data],
-            generation_config=genai.types.GenerationConfig(temperature=0.7),
-            stream=True
-        )
-        summary_output = ""
-        for message in response_stream:
-            summary_output += message.text
-        response_stream.resolve()
-        return summary_output
-    
     else:
         default_prompt = "Summarize and extract text (keyword information) from documents relevant to organizational needs."
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        response_stream = model.generate_content(
-            [default_prompt, text_data],
-            generation_config=genai.types.GenerationConfig(temperature=0.7),
-            stream=True
-        )
-        summary_output = ""
-        for message in response_stream:
-            summary_output += message.text
-        response_stream.resolve()
-        return summary_output
+
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    response_stream = model.generate_content(
+        [default_prompt, text_data],
+        generation_config=genai.types.GenerationConfig(temperature=0.7),
+        stream=True
+    )
+    summary_output = ""
+    for message in response_stream:
+        summary_output += message.text
+    response_stream.resolve()
+    
+    # Convert the summary to Markdown format
+    markdown_summary = f"**Summary:**\n\n{summary_output}"
+    return markdown_summary
 
 def user_input(user_question):
     """Handle user queries using a conversational chain with a fallback to Gemini API."""
@@ -143,13 +134,14 @@ def user_input(user_question):
             final_response += message.text
         combined_response_stream.resolve()
         
-        return final_response
+        # Convert the final response to Markdown format
+        markdown_response = f"**Final Answer:**\n\n{final_response}"
+        return markdown_response
     except Exception as e:  
-        return f"Error: {str(e)}"
+        return f"**Error:** {str(e)}"
     
 
 def fetch_org_info_from_genai(filepath):
-   
     text_data = get_pdf_text(filepath)
     
     default_prompt = (
@@ -173,7 +165,9 @@ def fetch_org_info_from_genai(filepath):
     
     response_stream.resolve()
 
-    return org_info_output
+    # Convert the organization info to Markdown format
+    markdown_org_info = f"**Organization Information:**\n\n{org_info_output}"
+    return markdown_org_info
 
 
 def fetch_images(pdf_path):
@@ -196,20 +190,23 @@ def fetch_images(pdf_path):
 
 def fetch_and_display_image_info(folder_path):
     parent_directory = os.path.dirname(folder_path)
-    # st.write(parent_directory)
     image_folder = os.path.join(parent_directory, "images")
-    # st.write(image_folder)
     image_files = os.listdir(image_folder)
+    image_descriptions = []
+
     for image_file in image_files:
         image_path = os.path.join(image_folder, image_file)
         image = Image.open(image_path)
 
-        # image_data = input_image_setup(image_path)
-        # response = get_gemini_response(input_prompt, image_data, input_prompt)
         model = genai.GenerativeModel("gemini-1.5-flash")
-        # def to_markdown(text):
-        #     text = text.replace("•", "  *")
-        #     return Markdown(textwrap.indent(text, "> ", predicate=lambda _: True))
-        # response = get_gemini_response(input, image, input_prompt)
         response = model.generate_content(["Describe in detail the image", image], stream=True)
         response.resolve()
+
+        # Convert the image description to Markdown format
+        markdown_description = f"**Image Description:**\n\n{response.text}"
+        image_descriptions.append({
+            "url": image_path,
+            "description": markdown_description
+        })
+
+    return image_descriptions
