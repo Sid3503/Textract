@@ -174,13 +174,12 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 ![OTP Verification](https://github.com/user-attachments/assets/c8d82c94-0ac0-4416-8e3c-69ecba2f8a3d)
 *OTP verification page.*
 
-![Homepage](screenshots/homepage.png)
+![Homepage](https://github.com/user-attachments/assets/b2e68020-2eab-4041-88c1-7205fa36b197)
 *Homepage of the application.*
 
-![Summary](screenshots/summary.png)
-*Example of a PDF summary.*
+![Summary](https://github.com/user-attachments/assets/88875136-1c21-4eb0-93ad-9a689e71ec6d)
 
-![Question Answering](screenshots/question.png)
-*Example of question answering.*
+![Question Answering](https://github.com/user-attachments/assets/e5a664fc-852e-47de-9a3b-3b5a2a9d8561)
+*Image & Analysis.*
 
-For any questions or issues, please open an issue on the [GitHub repository](https://github.com/Sid3503/Major).
+For any questions or issues, please open an issue on the [@Siddharth Mishra](https://github.com/Sid3503)
