@@ -33,6 +33,12 @@ app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS') == 'True'
 app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL') == 'True'
 
+UPLOAD_FOLDER = 'uploads'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 mail = Mail(app)
 
 def remove_markdown(text):
@@ -131,7 +137,12 @@ def process_pdf():
     
     if file:
         filename = secure_filename(file.filename)
-        filepath = os.path.join('uploads', filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+        # Ensure the uploads folder exists
+        if not os.path.exists(app.config['UPLOAD_FOLDER']):
+            os.makedirs(app.config['UPLOAD_FOLDER'])
+
         file.save(filepath)
 
         try:
