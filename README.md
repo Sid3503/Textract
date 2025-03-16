@@ -168,10 +168,10 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 
 ## 📸 Screenshots
 
-![Login](screenshots/login.png)
+![Login](https://github.com/user-attachments/assets/384b0fbb-d959-4c36-9191-e7d32765d0bf)
 *Login page for employee authentication.*
 
-![OTP Verification](screenshots/verify.png)
+![OTP Verification]([screenshots/verify.png](https://github.com/user-attachments/assets/c8d82c94-0ac0-4416-8e3c-69ecba2f8a3d))
 *OTP verification page.*
 
 ![Homepage](screenshots/homepage.png)
