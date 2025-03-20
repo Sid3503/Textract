@@ -146,28 +146,32 @@ def user_input(user_question):
     
 
 def fetch_org_info_from_genai(filepath):
-   
     text_data = get_pdf_text(filepath)
-    
-    default_prompt = (
-        "Extract the organization name and relevant details from the following document. "
-        "Mention the core components of the organization discussed in the PDF."
+
+    # Generalized prompt to adapt to different PDF types
+    dynamic_prompt = (
+        "Analyze the following document and extract details about the organization it is associated with. "
+        "If the document is an HR manual or policy document, focus on the organization name, policies, and structure. "
+        "If it is a research paper, thesis, or technical report, identify the institution, funding sources, and affiliations. "
+        "For business reports, contracts, or legal documents, extract relevant company details and contractual entities. "
+        "Ensure the response is structured and relevant to the document type."
     )
-    
+
     model = genai.GenerativeModel("gemini-1.5-flash")
 
     response_stream = model.generate_content(
-        [default_prompt, text_data],
+        [dynamic_prompt, text_data],
         generation_config=genai.types.GenerationConfig(temperature=0.7),
         stream=True
     )
+    
     org_info_output = ""
     for message in response_stream:
         if hasattr(message, 'text'):
             org_info_output += message.text
         else:
             raise ValueError("No valid text in the response part.")
-    
+
     response_stream.resolve()
 
     return org_info_output
