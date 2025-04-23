@@ -651,3 +651,78 @@ button:active {
 .description-content a:hover {
   text-decoration: underline;
 }
+
+/* Markdown Content Styling */
+#response {
+  line-height: 1.6;
+  font-size: 16px;
+  color: #333;
+}
+
+#response h1, #response h2, #response h3, #response h4, #response h5, #response h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+#response h1 { font-size: 2em; }
+#response h2 { font-size: 1.5em; }
+#response h3 { font-size: 1.25em; }
+#response h4 { font-size: 1em; }
+
+#response p {
+  margin-bottom: 16px;
+}
+
+#response ul, #response ol {
+  margin-bottom: 16px;
+  padding-left: 2em;
+}
+
+#response li {
+  margin-bottom: 8px;
+}
+
+#response code {
+  background-color: #f6f8fa;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+#response pre {
+  background-color: #f6f8fa;
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+#response pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+#response blockquote {
+  margin: 0 0 16px 0;
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+}
+
+#response table {
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+#response table th, #response table td {
+  padding: 6px 13px;
+  border: 1px solid #dfe2e5;
+}
+
+#response table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
