@@ -8,8 +8,50 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/account_1728902.png') }}">
+    <style>
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      
+      .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .loading-text {
+        margin-top: 20px;
+        color: #3498db;
+        font-size: 18px;
+        font-weight: bold;
+      }
+    </style>
   </head>
   <body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+      <div class="flex flex-col items-center">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Processing your registration...</div>
+      </div>
+    </div>
     <div id="webcrumbs">
       <div class="w-[1200px] bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl shadow-2xl p-8">
         <div class="flex flex-row items-center justify-between mb-8">
@@ -106,10 +148,12 @@
         const formData = new FormData(this);
         const registerButton = document.getElementById("registerButton");
         const loadingSpinner = document.getElementById("loading-spinner");
+        const loadingOverlay = document.getElementById("loadingOverlay");
 
-        // Show loading spinner and disable the register button
+        // Show loading overlay and disable the register button
         registerButton.disabled = true;
         loadingSpinner.classList.remove("hidden");
+        loadingOverlay.style.display = "flex";
 
         try {
           const response = await fetch("/register", {
@@ -120,15 +164,19 @@
           const data = await response.json();
     
           if (response.ok && data.success) {
-            // Redirect to OTP verification page
+            // Keep the loading overlay visible while redirecting
             window.location.href = data.redirect_url;
           } else {
             errorMessageDiv.textContent = data.error || "Registration failed. Please try again.";
             errorMessageDiv.classList.remove("hidden");
+            // Hide loading overlay if there's an error
+            loadingOverlay.style.display = "none";
           }
         } catch (error) {
           errorMessageDiv.textContent = "Something went wrong. Please try again.";
           errorMessageDiv.classList.remove("hidden");
+          // Hide loading overlay if there's an error
+          loadingOverlay.style.display = "none";
         } finally {
           // Re-enable the register button and hide the loading spinner
           registerButton.disabled = false;
