@@ -6,6 +6,64 @@
     <title>Enterprise AI Assistant</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/help_1698589.png') }}">
+    <style>
+      .table-section {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      
+      .table-list {
+        margin-top: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      
+      .table-item {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        padding: 8px 12px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      
+      .table-item:hover {
+        background-color: #f0f7ff;
+        border-color: #3498db;
+      }
+      
+      .table-icon {
+        margin-right: 8px;
+        color: #3498db;
+      }
+      
+      .table-download-btn {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        margin-left: 8px;
+      }
+      
+      .table-download-btn:hover {
+        background-color: #2980b9;
+      }
+      
+      .no-tables-message {
+        color: #777;
+        font-style: italic;
+        margin-top: 10px;
+      }
+    </style>
   </head>
   <body>
     {% if 'username' in session %}
@@ -55,11 +113,20 @@
         </div>
       </div>
 
+      <!-- Table Extraction Section -->
+      <div class="table-section">
+        <h2>Extract Tables from PDF</h2>
+        <button type="button" onclick="extractTables()">Extract Tables</button>
+        <div id="tableList" class="table-list">
+          <div class="no-tables-message">No tables extracted yet. Upload a PDF and click "Extract Tables".</div>
+        </div>
+      </div>
+
       <div class="image-section">
         <h2>Image Analysis & AI Descriptions</h2>
         <button type="button" onclick="extractImages()">Extract, Display & Describe Images</button>
         <div id="imageContainer" class="image-container"></div>
-      </div> 
+      </div>    
 
     </div>
 
