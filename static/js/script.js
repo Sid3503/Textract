@@ -124,8 +124,23 @@ function askQuestion() {
     .then((response) => response.json())
     .then((data) => {
       const response = data.response || data.error;
-      document.getElementById("response").innerText = response;
-      localStorage.setItem("pdfResponse", response); // Store response in localStorage
+      
+      // Configure marked for GitHub-flavored markdown
+      marked.setOptions({
+        gfm: true, // Enable GitHub Flavored Markdown
+        breaks: true, // Convert line breaks to <br>
+        headerIds: true, // Add IDs to headers
+        mangle: false, // Don't escape HTML
+        sanitize: false, // Don't sanitize HTML
+        smartLists: true, // Use smarter list behavior
+        smartypants: true, // Use "smart" typographic punctuation
+        xhtml: false // Don't close empty tags with />
+      });
+      
+      // Convert the response to markdown and display it
+      const formattedResponse = marked.parse(response);
+      document.getElementById("response").innerHTML = formattedResponse;
+      localStorage.setItem("pdfResponse", response); // Store original response in localStorage
     })
     .catch((error) => {
       document.getElementById("response").innerText = "Error: " + error;
@@ -289,4 +304,84 @@ function startVoiceInput() {
   } else {
     alert('Voice recognition not supported in this browser.');
   }
+}
+
+function extractTables() {
+  const fileInput = document.getElementById("pdf_file");
+
+  if (!fileInput.files.length) {
+    alert("Please select a PDF file to extract tables.");
+    return;
+  }
+
+  toggleLoading(true); // Show spinner and apply blur
+
+  const formData = new FormData();
+  formData.append("pdf_file", fileInput.files[0]);
+
+  fetch("/extract_tables", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      // Display the extracted tables
+      displayTables(data.table_files);
+      showAlert(data.message);
+    })
+    .catch((error) => {
+      showAlert("Error: " + error.message);
+    })
+    .finally(() => {
+      toggleLoading(false); // Hide spinner and remove blur
+    });
+}
+
+function displayTables(tableFiles) {
+  const tableList = document.getElementById("tableList");
+  tableList.innerHTML = ""; // Clear previous content
+
+  if (!tableFiles || tableFiles.length === 0) {
+    tableList.innerHTML = '<div class="no-tables-message">No tables found in the PDF.</div>';
+    return;
+  }
+
+  tableFiles.forEach((filename) => {
+    const tableItem = document.createElement("div");
+    tableItem.className = "table-item";
+    
+    // Add table icon
+    const icon = document.createElement("span");
+    icon.className = "table-icon";
+    icon.innerHTML = "📊";
+    tableItem.appendChild(icon);
+    
+    // Add table name
+    const tableName = document.createElement("span");
+    tableName.textContent = filename;
+    tableItem.appendChild(tableName);
+    
+    // Add download button
+    const downloadBtn = document.createElement("button");
+    downloadBtn.className = "table-download-btn";
+    downloadBtn.textContent = "Download";
+    downloadBtn.onclick = () => downloadTable(filename);
+    tableItem.appendChild(downloadBtn);
+    
+    tableList.appendChild(tableItem);
+  });
+}
+
+function downloadTable(filename) {
+  // Create a link to download the table
+  const downloadLink = document.createElement("a");
+  downloadLink.href = `/download_table/${filename}`;
+  downloadLink.download = filename;
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
 }
