@@ -9,7 +9,7 @@ import google.generativeai as genai
 from langchain.memory import ConversationBufferMemory
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
-from langchain_community.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS, Chroma
 from langchain_community.embeddings import HuggingFaceInstructEmbeddings
 from langchain_community.llms import HuggingFaceHub
 from werkzeug.utils import secure_filename
@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 from tabula.io import read_pdf
 import fitz
 from PIL import Image
+import pandas as pd
 
 # Load environment variables
 load_dotenv()
@@ -214,3 +215,24 @@ def fetch_and_display_image_info(folder_path):
         # response = get_gemini_response(input, image, input_prompt)
         response = model.generate_content(["Describe in detail the image", image], stream=True)
         response.resolve()
+
+def fetch_tables_and_images(pdf_path):
+    """Extract tables from PDF and save them as CSV files."""
+    # Extract tables
+    dfs = read_pdf(pdf_path, pages='all', multiple_tables=True)
+    
+    # Create tables folder
+    folder_path = os.path.dirname(pdf_path)
+    table_folder = os.path.join(folder_path, "tables")
+    os.makedirs(table_folder, exist_ok=True)
+    
+    # Save each table as CSV
+    table_files = []
+    for i, df in enumerate(dfs):
+        if not df.empty:  # Only save non-empty tables
+            table_filename = f"table_no_{i+1}.csv"
+            table_path = os.path.join(table_folder, table_filename)
+            df.to_csv(table_path, index=False)
+            table_files.append(table_filename)
+    
+    return table_files
