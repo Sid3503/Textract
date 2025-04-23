@@ -178,4 +178,12 @@ Contributions are welcome! If you'd like to contribute, please follow these step
 ![Question Answering](https://github.com/user-attachments/assets/e5a664fc-852e-47de-9a3b-3b5a2a9d8561)
 *Image & Analysis.*
 
-For any questions or issues, please open an issue on the [@Siddharth Mishra](https://github.com/Sid3503)
+## 👤 Author
+
+For any questions or issues, please open an issue on GitHub: [@Siddharth Mishra](https://github.com/Sid3503)
+
+---
+
+<p align="center">
+  Made with ❤️ and lots of ☕
+</p>
