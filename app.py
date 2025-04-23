@@ -244,6 +244,7 @@ def login():
         else:
             return jsonify({'success': False, 'error': 'Invalid username or password'}), 401
             
+    # For GET requests, render the template with any flash messages
     return render_template('login_new.html')
 
 @app.route('/verify', methods=['GET', 'POST'])
