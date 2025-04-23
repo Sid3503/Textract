@@ -1,7 +1,7 @@
 # app.py
 import re
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
-from pdf_processing import get_pdf_text, get_text_chunks, summarize_data, user_input, fetch_org_info_from_genai, fetch_images
+from pdf_processing import get_pdf_text, get_text_chunks, summarize_data, user_input, fetch_org_info_from_genai, fetch_images, fetch_tables_and_images
 import os
 from werkzeug.utils import secure_filename
 import os
@@ -436,6 +436,59 @@ def logout():
     session.pop('username', None)
     session.pop('otp', None)
     return redirect(url_for('login'))
+
+@app.route('/extract_tables', methods=['POST'])
+def extract_tables():
+    """Extract tables from PDF and return list of table files."""
+    if 'pdf_file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
+    file = request.files['pdf_file']
+    
+    if file.filename == '' or not file.filename.endswith('.pdf'):
+        return jsonify({'error': 'Invalid file type. Only PDFs are allowed.'}), 400
+    
+    if file:
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+
+        try:
+            # Extract tables from PDF
+            table_files = fetch_tables_and_images(filepath)
+            
+            if not table_files:
+                return jsonify({'message': 'No tables found in the PDF'}), 200
+            
+            return jsonify({
+                'message': f'Successfully extracted {len(table_files)} tables',
+                'table_files': table_files
+            }), 200
+        except Exception as e:
+            return jsonify({'error': f'Error extracting tables: {str(e)}'}), 500
+        finally:
+            # Don't remove the filepath as we need it for downloading tables
+            pass
+
+@app.route('/download_table/<filename>')
+def download_table(filename):
+    """Serve a table CSV file for download."""
+    try:
+        # Get the tables directory
+        tables_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'tables')
+        
+        # Check if the file exists
+        if not os.path.exists(os.path.join(tables_dir, filename)):
+            return jsonify({'error': 'Table file not found'}), 404
+        
+        # Serve the file
+        return send_from_directory(
+            tables_dir, 
+            filename, 
+            as_attachment=True,
+            download_name=filename
+        )
+    except Exception as e:
+        return jsonify({'error': f'Error downloading table: {str(e)}'}), 500
 
 if __name__ == '__main__':
     if not os.path.exists('uploads'):
